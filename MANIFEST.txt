@@ -1,0 +1,23 @@
+# Decoder-zip membership for tag ltcb-3.15bpw.
+# Regenerated with sha256 of every packed file by:
+#   ./scripts/package_s.sh
+#
+# Expected groups (this zip enters Total S; the AC bitstream does not):
+#
+#   bin/blsmc_prepare
+#   dict/english.dic
+#   sidecars/payload_sim.trailer.bin
+#   weights/mixed_da_bpw3.15_upb1.8.safetensors
+#   weights/mixed_da_bpw3.15_upb1.8.json
+#   code/xsa_ttt/*          incremental AC encode/decode
+#   code/hyperflow_distillation/*   Init(seed)+ΔW decode (no pack/calibrate)
+#   code/model/arithmetic_coder_lm.py
+#   code/model/deterministic_mode.py
+#   DECODE.env  DECODE.md  MANIFEST.txt
+#
+# Tagged sizes (InfoZIP zip -9):
+#   bitstream  93,154,708
+#   decoder zip  13,437,796
+#   S  106,592,504
+#
+# sha256 lines are appended when the zip is built.

@@ -1,0 +1,4 @@
+# Peel compile subset is tracked. Ignore a full leftover clone only.
+/.cmix-lex-full/
+# Fetched UPX binary (scripts/fetch_upx.sh)
+/upx/

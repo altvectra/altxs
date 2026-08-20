@@ -1,0 +1,29 @@
+[project]
+name = "altxs"
+version = "3.15.0"
+description = "LTCB public compressor: Transformer + AC + dict/peel"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { file = "LICENSE" }
+dependencies = [
+    # Locked encode/decode path (V=256 incremental AC + Init(seed)+ΔW).
+    "numpy==1.26.4",
+    "safetensors>=0.4.5,<0.8",
+    "tqdm>=4.66",
+    "torch>=2.4",
+    # H100 fused / split-attn / mega kernels. Optional import on CPU/mac.
+    "triton>=3.0; sys_platform == 'linux'",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.uv]
+# Deps only — PYTHONPATH=src, not an installable wheel.
+package = false
+python-preference = "managed"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "src/model"]
+addopts = "-q --tb=short"

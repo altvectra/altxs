@@ -1,0 +1,39 @@
+altxs third-party notices
+=========================
+
+This repository ships original encode/decode code under LICENSE (MIT).
+The peel binary (`blsmc_prepare`) links cmix-lex preprocess sources at
+build time. Those files stay under their upstream licenses.
+
+cmix-lex (dictionary + PHDA9 / WRT / reorder)
+---------------------------------------------
+Source: https://github.com/blahem/cmix-lex
+License: GNU GPL v3 (same family as upstream cmix / fxcm / PAQ)
+
+Used here (vendored peel subset, commit `370e698f7ea62168cc64326ff97950c3dc212691`):
+  - `dict/english.dic` (WRT dictionary; counted in LTCB S)
+  - `dict/new_article_order` (M2 article reorder; required to emit payload_sim)
+  - `vendor/cmix-lex/src/readalike_prepr` (M1 split, M2 reorder, M3 PHDA9)
+  - `vendor/cmix-lex/src/preprocess` (M4 WRT)
+  - `vendor/cmix-lex/src/r1_reorder_transform.*`
+  - `vendor/cmix-lex/src/ds` (emhash, used by WRT)
+
+`scripts/fetch_vendors.sh` verifies this subset. `REFRESH=1` re-copies it from upstream.
+
+cmix (dictionary lineage)
+-------------------------
+https://github.com/byronknoll/cmix
+License: GNU GPL v3
+`english.dic` originates in the cmix WRT dictionary.
+
+UPX (required packer for the peel binary)
+----------------------------------------
+https://upx.github.io
+License: GPL-2.0-or-later
+`package_s.sh` always UPX-packs `bin/blsmc_prepare` before `zip -9`. That
+packed binary is what enters Total S. Procure with `scripts/fetch_upx.sh`.
+UPX itself is not shipped in this tree.
+
+PyTorch / CUDA / safetensors
+----------------------------
+Runtime dependencies only (see requirements.txt). Not vendored.

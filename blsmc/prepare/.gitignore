@@ -1,0 +1,6 @@
+blsmc_prepare
+*.o
+shim/ds
+shim/predictor.h
+shim/preprocess/*.cpp
+shim/preprocess/dictionary.h

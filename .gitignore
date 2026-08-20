@@ -1,0 +1,30 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Official corpus and peel products (do not git)
+data/
+!data/.gitkeep
+
+# Full cmix-lex clone leftover (peel subset is tracked under vendor/cmix-lex/)
+vendor/upx/
+
+# Local decode/encode scratch + release-sized assets
+work/
+weights/*.safetensors
+weights/*.npz
+sidecars/
+*.zip
+
+# Build
+blsmc/prepare/blsmc_prepare
+blsmc/prepare/*.o
+blsmc/prepare/shim/ds
+blsmc/prepare/shim/predictor.h
+blsmc/prepare/shim/preprocess/*.cpp
+blsmc/prepare/shim/preprocess/dictionary.h
