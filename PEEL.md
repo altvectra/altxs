@@ -45,6 +45,6 @@ WITH_ENWIK9=1 WITH_PEEL=1 ./scripts/setup.sh
 # or: make -C blsmc/prepare encode9
 ```
 
-Needs `data/enwik9` (from `fetch_enwik9.sh`), `dict/english.dic`, `dict/new_article_order`, and a built `blsmc_prepare`. Scratch is ~2–3 GiB under `data/blsmc_prepare_work`. PHDA9 + WRT is slow (CPU, tens of minutes to hours).
+Needs `data/enwik9` (from `fetch_enwik9.sh`), `dict/english.dic`, `dict/new_article_order`, and a built `blsmc_prepare`. Scratch is ~2–3 GiB under `data/blsmc_prepare_work`. CPU-only; on a recent server (H100-class box) peel is about **30 seconds**. A laptop can take longer.
 
 Then AC encode that product with the same `DECODE.env` — see [ENCODE.md](ENCODE.md).
