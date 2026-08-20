@@ -20,6 +20,8 @@ command -v clang++ >/dev/null 2>&1 || command -v c++ >/dev/null 2>&1 || {
   echo "error: need a C++17 compiler (clang++ or c++)" >&2
   exit 1
 }
+# Fresh objects for this machine (stale arm64 .o + x86_64 c++ fails to link).
+make -C "${ROOT}/blsmc/prepare" clean
 make -C "${ROOT}/blsmc/prepare"
 "${ROOT}/scripts/fetch_upx.sh"
 

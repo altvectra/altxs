@@ -8,6 +8,7 @@ CXX ?= clang++
 CC ?= clang
 REPO := $(abspath ../..)
 CMIX_LEX := $(REPO)/vendor/cmix-lex
+HOST_ARCH := $(shell uname -m)
 
 CXXFLAGS ?= -std=c++17 -O2 -Wall \
 	-I. \
@@ -18,9 +19,26 @@ CXXFLAGS ?= -std=c++17 -O2 -Wall \
 # _GNU_SOURCE: memmem on Linux (also set in m5_payload_sim.c).
 CFLAGS ?= -std=c11 -O2 -Wall -I. -D_GNU_SOURCE -D_DARWIN_C_SOURCE
 
-.PHONY: all clean shim encode9 decode9
+# One ABI for C objects and the C++ link. Copies of this tree (or Rosetta
+# vs native clang) otherwise leave arm64 .o files that an x86_64 c++ rejects.
+ifeq ($(shell uname -s),Darwin)
+  CFLAGS += -arch $(HOST_ARCH)
+  CXXFLAGS += -arch $(HOST_ARCH)
+endif
 
-all: blsmc_prepare
+.PHONY: all check-arch clean shim encode9 decode9
+
+all: check-arch
+	$(MAKE) blsmc_prepare
+
+check-arch:
+	@cur="$(HOST_ARCH)"; \
+	old=$$(cat .arch 2>/dev/null || echo ""); \
+	if [ "$$old" != "$$cur" ]; then \
+	  echo "architecture $${old:-none} -> $$cur; rebuilding peel objects"; \
+	  rm -f m3_densify.o m5_payload_sim.o product_seal.o bpe_tokenizer.o blsmc_prepare; \
+	  printf '%s\n' "$$cur" > .arch; \
+	fi
 
 shim:
 	@test -d "$(CMIX_LEX)" || { echo "error: missing $(CMIX_LEX); run ./scripts/fetch_vendors.sh" >&2; exit 1; }
@@ -60,7 +78,7 @@ blsmc_prepare: shim m3_densify.o m5_payload_sim.o product_seal.o bpe_tokenizer.o
 	  $(CMIX_LEX)/src/r1_reorder_transform.cpp
 
 clean:
-	rm -f blsmc_prepare m3_densify.o m5_payload_sim.o product_seal.o bpe_tokenizer.o
+	rm -f blsmc_prepare m3_densify.o m5_payload_sim.o product_seal.o bpe_tokenizer.o .arch
 
 # Full enwik9 → payload_sim. Fresh workdir every run.
 encode9: blsmc_prepare

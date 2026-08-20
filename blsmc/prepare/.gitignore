@@ -1,5 +1,6 @@
 blsmc_prepare
 *.o
+.arch
 shim/ds
 shim/predictor.h
 shim/preprocess/*.cpp
