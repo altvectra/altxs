@@ -122,12 +122,32 @@ cp -p "${ENGLISH_DIC}" "${PKG}/dict/english.dic"
 echo "[2/6] sidecar trailer (not in the AC stream)"
 mkdir -p "${ROOT}/sidecars"
 if [[ -f "${PRODUCT}" ]]; then
-  STREAM_N="$("${PY}" - "${ROOT}/src" "${PRODUCT}" <<'EOF'
+  STREAM_N="$("${PY}" - "${PRODUCT}" <<'EOF'
+# Stdlib only — do not import xsa_ttt (that pulls numpy).
 import sys
 from pathlib import Path
-sys.path.insert(0, sys.argv[1])
-from xsa_ttt.data import _byte_stream_len
-print(_byte_stream_len(Path(sys.argv[2])))
+
+path = Path(sys.argv[1])
+end = path.stat().st_size
+
+def strip_footer(end_n: int, foot: bytes) -> int:
+    need = len(foot) + 8
+    if end_n < need:
+        return end_n
+    with open(path, "rb") as f:
+        f.seek(end_n - need)
+        tail = f.read(need)
+    if tail[: len(foot)] != foot:
+        return end_n
+    blob_len = int.from_bytes(tail[len(foot) :], "little")
+    stream_n = end_n - need - blob_len
+    if stream_n < 0 or blob_len > end_n - need:
+        return end_n
+    return stream_n
+
+end = strip_footer(end, b"BLSMETA1")
+end = strip_footer(end, b"M3SIDFTR")
+print(end)
 EOF
 )"
   FILE_N="$(file_size "${PRODUCT}")"

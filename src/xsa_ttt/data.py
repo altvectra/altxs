@@ -7,10 +7,12 @@ import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
-
-import numpy as np
+from typing import TYPE_CHECKING
 
 from .config import EXPECTED_587_BYTES
+
+if TYPE_CHECKING:
+    import numpy as np
 
 _SRC = Path(__file__).resolve().parents[1]
 _REPO = _SRC.parent
@@ -163,6 +165,8 @@ def load_symbols(
     mmap: bool = True,
 ) -> tuple[np.ndarray, CorpusInfo]:
     """Load token ids (uint16) or bytes (uint8). Returns (array, info)."""
+    import numpy as np
+
     p = resolve_data_path(path)
     info = describe_corpus(p)
     if info.kind == "bpe_tokens":
