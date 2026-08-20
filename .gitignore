@@ -16,7 +16,6 @@ vendor/upx/
 
 # Local decode/encode scratch + release-sized assets
 work/
-weights/*.safetensors
 weights/*.npz
 sidecars/
 *.zip
