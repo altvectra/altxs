@@ -1,7 +1,7 @@
 # Unique contributions to Total S
 
 LTCB ranks **S = |bitstream| + |zip -9 of the decoder|**. Tagged
-`ltcb-3.15bpw`: 93,154,708 + 13,437,796 = **106,592,504**.
+`ltcb-3.15bpw`: 93,434,410 + 13,490,401 = **106,924,811**.
 
 This note is only the pieces that are original to this stack **and**
 move S. Two levers: fewer (or cheaper) AC symbols, and a smaller decoder

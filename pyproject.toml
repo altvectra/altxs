@@ -1,6 +1,6 @@
 [project]
 name = "altxs"
-version = "3.15.0"
+version = "1.0.0"
 description = "LTCB public compressor: Transformer + AC + dict/peel"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"

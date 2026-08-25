@@ -6,20 +6,120 @@ LTCB ranks **Total S = |compressed enwik9| + |zip of the decompresser|**. This g
 
 | Tag | Algorithm | Kind | Bitstream | Decoder zip | **S** |
 |---|---|---|---:|---:|---:|
-| `ltcb-3.15bpw` | Transformer + AC + dict/peel | `xd` (source/binary + separate bitstream) | 93,154,708 | 13,437,796 | **106,592,504** |
+| `ltcb-3.15bpw` | Transformer + AC + dict/peel | `xd` (source/binary + separate bitstream) | 93,434,410 | 13,490,401 | **106,924,811** |
 
-Ranking stays **pending** until a stranger reconstructs `enwik9` byte-identical.
+Decoder zip (`zip -9`, 35 members, 89.4% of raw) from [`final_total_S.md`](final_total_S.md):
 
-## Official enwik9 checksums
+| Group | Raw | In zip |
+|---|---:|---:|
+| bin (`blsmc_prepare`, UPX -9) | 91,200 | 89,942 |
+| dict (`english.dic`) | 411,996 | 175,326 |
+| sidecars (`payload_sim.trailer.bin`) | 3,208 | 2,639 |
+| weights (`mixed_da_bpw3.15_upb1.8`) | 13,943,908 | 13,064,110 |
+| code (decode import closure) | 615,690 | 144,806 |
+| (root) `MANIFEST.txt` / `DECODE.md` / `DECODE.env` | 10,226 | 4,418 |
+| packed members | 15,076,228 | 13,481,241 |
+| zip central-dir / local-hdr overhead | | 9,160 |
+| **S zip** `blsmc_ac_decoder.zip` | | **13,490,401** |
 
-| File | Size | MD5 | SHA-1 |
-|---|---:|---|---|
-| enwik9 | 1,000,000,000 | `e206c3450ac99950df65bf70ef61a12d` | `2996e86fb978f93cca8f566cc56998923e7fe581` |
+**S** = 93,434,410 + 13,490,401 = **106,924,811**. The AC bitstream is counted separately and is not in the zip.
 
-Published SHA-256 of reconstructed `enwik9`:
+(Files available for review here)
 
+
+## Submission for Large Text Compression Benchmark
+
+Submission Details (Made for the Submission Guidance in https://mattmahoney.net/dc/textrules.html:
+
+Name: altxs
+Version: 1.0.0
+
+enwik9: 93,434,410 bytes (enwiki9), 13,490,401 bytes (decoder zip), total S combined: 106,924,811 bytes
+enwik8: NA (we haven't run the full algorithm on enwiki8 as of yet)
+
+
+Options you used to obtain best compression of enwik9.
+Available in [DECODE.env](DECODE.env)
+
+Size of the decompressor as a zip file (smaller of source or executable).
+13,490,401 bytes (decoder zip),
+
+Approximate compression and decompression time.
+ENCODE:
+63:09:32 (63 hours, 9 minutes, 32 seconds)
+
+(ending log of encode)
 ```
-159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc
+AC incr: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 35174/35174 [63:09:32<00:00,  6.46s/seg, 0.5x:21% 1x:25% 2x:52% 4x:2%]
+[xsa_ttt] AC bits/sym=1.29317 source_bpb=1.29317 payload=93,153,018 B / 576,278,322 sym est_full_bin=93,153,537 B (93.2 MB) roundtrip=n/a retrains=35173 sha256_ok=None
+```
+
+DECODE:
+330:32:56 (330 hours, 32 minutes, 56 seconds)
+That is 13d 18:32:56, or 1,189,976 seconds.
+On a 1 GB enwik9 denominator that would be 1,189,976 ns/byte.
+
+
+Approximate memory used.
+RAM: ~8Gbs
+VRAM: ~80Gbs (on GPU such as NVIDIA H100)
+
+Here's the system we ran on:
+```
+inxi -Fxxxz
+
+System:
+  Kernel: 6.17.0-1021-azure arch: x86_64 bits: 64 compiler: gcc v: 13.3.0 clocksource: tsc
+  Console: pty pts/0 Distro: Ubuntu 24.04.4 LTS (Noble Numbat)
+Machine:
+  Type: Desktop Mobo: Microsoft model: Virtual Machine v: Hyper-V UEFI Release v4.1
+    serial: <superuser required> uuid: 72d96d6f-baed-43bb-b958-8e4ba1b988cc UEFI: Microsoft
+    v: Hyper-V UEFI Release v4.1 date: 01/08/2026
+CPU:
+  Info: 40-core model: AMD EPYC 9V84 bits: 64 type: MCP smt: <unsupported> arch: Zen 4 rev: 1
+    cache: L1: 2.5 MiB L2: 40 MiB L3: 160 MiB
+  Speed (MHz): avg: 2464 high: 3699 min/max: N/A cores: 1: 2400 2: 2400 3: 2400 4: 2400 5: 2400
+    6: 2400 7: 2400 8: 2400 9: 2400 10: 2400 11: 2400 12: 2400 13: 2400 14: 2400 15: 2400 16: 2400
+    17: 3699 18: 2400 19: 2400 20: 2400 21: 2400 22: 2400 23: 2400 24: 2400 25: 2400 26: 2400
+    27: 2400 28: 2400 29: 2400 30: 2400 31: 2400 32: 2400 33: 3697 34: 2400 35: 2400 36: 2400
+    37: 2400 38: 2400 39: 2400 40: 2400 bogomips: 192002
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3 svm
+Graphics:
+  Device-1: NVIDIA GH100 [H100L 94GB] driver: nvidia v: 595.71.05 arch: Hopper
+    bus-ID: 0001:00:00.0 chip-ID: 10de:2321 class-ID: 0302
+  Display: server: X.org v: 1.21.1.11 driver: gpu: hyperv_drm tty: 237x67
+  Monitor-1: Virtual-1 size-res: N/A in console modes: max: 1024x768 min: 640x480
+  API: EGL v: 1.5 hw: drv: nvidia platforms: device: 0 drv: nvidia device: 2 drv: swrast
+    surfaceless: drv: nvidia inactive: gbm,wayland,x11,device-1
+  API: OpenGL v: 4.6.0 compat-v: 4.5 vendor: mesa v: 25.2.8-0ubuntu0.24.04.2
+    note: console (EGL sourced) renderer: NVIDIA H100 NVL/PCIe/SSE2, llvmpipe (LLVM 20.1.2 256 bits)
+Audio:
+  Message: No device data found.
+Network:
+  Message: No PCI device data found.
+  IF-ID-1: eth0 state: up speed: 100000 Mbps duplex: full mac: <filter>
+Drives:
+  Local Storage: total: 3.74 TiB used: 111.41 GiB (2.9%)
+  ID-1: /dev/nvme0n1 vendor: Microsoft model: NVMe Direct Disk v2 size: 3.49 TiB speed: 16 Gb/s
+    lanes: 4 tech: SSD serial: <filter> fw-rev: NVMDV002 temp: 71.8 C
+  ID-2: /dev/sda model: Virtual Disk size: 128 GiB tech: N/A serial: N/A fw-rev: 1.0 scheme: GPT
+  ID-3: /dev/sdb model: Virtual Disk size: 128 GiB tech: N/A serial: N/A fw-rev: 1.0 scheme: MBR
+Partition:
+  ID-1: / size: 122.95 GiB used: 111.13 GiB (90.4%) fs: ext4 dev: /dev/sda1
+  ID-2: /boot size: 880.4 MiB used: 273.9 MiB (31.1%) fs: ext4 dev: /dev/sda16
+  ID-3: /boot/efi size: 104.3 MiB used: 6.1 MiB (5.9%) fs: vfat dev: /dev/sda15
+Swap:
+  Alert: No swap data was found.
+Sensors:
+  System Temperatures: cpu: N/A mobo: N/A gpu: nvidia temp: 53 C
+  Fan Speeds (rpm): N/A
+Info:
+  Memory: total: 320 GiB available: 314.69 GiB used: 5.78 GiB (1.8%)
+  Processes: 474 Power: uptime: 17d 22h 59m states: freeze,mem,disk suspend: s2idle wakeups: 0
+    hibernate: shutdown Init: systemd v: 255 target: graphical (5) default: graphical
+  Packages: pm: dpkg pkgs: 1105 Compilers: clang: 17 gcc: 13.3.0 alt: 12 Shell: Bash v: 5.2.21
+    running-in: pty pts/0 (SSH) inxi: 3.3.34
+
 ```
 
 ## Hardware (decode)
@@ -29,8 +129,66 @@ Published SHA-256 of reconstructed `enwik9`:
 | GPU | NVIDIA H100 (80 GB). CUDA required. CPU-only is **not** supported. |
 | VRAM | ~80 GB class (profile `large`, ~32M params + KV + fused window) |
 | RAM / disk | A few GiB host RAM; ~2–3 GiB scratch for peel inverse |
-| Encode wall clock | ~14 h for the full 576,278,322-symbol AC on one H100 |
-| Decode wall clock | Encode pays one window step per W=64 symbols; decode pays one step per accepted token. Multi-day (up to ~18 days) is still a valid LTCB result if the output is byte-identical. **This run is not CI.** |
+| Encode wall clock | ~60 h for the full 576,278,322-symbol AC on one H100 |
+| Decode wall clock | Encode pays one window step per W=64 symbols; decode pays one step per accepted token. Full reconstruct is multi-day (up to ~18 days on this class of machine). |
+
+(here's the system we used)
+
+```sh
+inxi -Fxxxz
+
+System:
+  Kernel: 6.17.0-1021-azure arch: x86_64 bits: 64 compiler: gcc v: 13.3.0 clocksource: tsc
+  Console: pty pts/0 Distro: Ubuntu 24.04.4 LTS (Noble Numbat)
+Machine:
+  Type: Desktop Mobo: Microsoft model: Virtual Machine v: Hyper-V UEFI Release v4.1
+    serial: <superuser required> uuid: 72d96d6f-baed-43bb-b958-8e4ba1b988cc UEFI: Microsoft
+    v: Hyper-V UEFI Release v4.1 date: 01/08/2026
+CPU:
+  Info: 40-core model: AMD EPYC 9V84 bits: 64 type: MCP smt: <unsupported> arch: Zen 4 rev: 1
+    cache: L1: 2.5 MiB L2: 40 MiB L3: 160 MiB
+  Speed (MHz): avg: 2464 high: 3699 min/max: N/A cores: 1: 2400 2: 2400 3: 2400 4: 2400 5: 2400
+    6: 2400 7: 2400 8: 2400 9: 2400 10: 2400 11: 2400 12: 2400 13: 2400 14: 2400 15: 2400 16: 2400
+    17: 3699 18: 2400 19: 2400 20: 2400 21: 2400 22: 2400 23: 2400 24: 2400 25: 2400 26: 2400
+    27: 2400 28: 2400 29: 2400 30: 2400 31: 2400 32: 2400 33: 3697 34: 2400 35: 2400 36: 2400
+    37: 2400 38: 2400 39: 2400 40: 2400 bogomips: 192002
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3 svm
+Graphics:
+  Device-1: NVIDIA GH100 [H100L 94GB] driver: nvidia v: 595.71.05 arch: Hopper
+    bus-ID: 0001:00:00.0 chip-ID: 10de:2321 class-ID: 0302
+  Display: server: X.org v: 1.21.1.11 driver: gpu: hyperv_drm tty: 237x67
+  Monitor-1: Virtual-1 size-res: N/A in console modes: max: 1024x768 min: 640x480
+  API: EGL v: 1.5 hw: drv: nvidia platforms: device: 0 drv: nvidia device: 2 drv: swrast
+    surfaceless: drv: nvidia inactive: gbm,wayland,x11,device-1
+  API: OpenGL v: 4.6.0 compat-v: 4.5 vendor: mesa v: 25.2.8-0ubuntu0.24.04.2
+    note: console (EGL sourced) renderer: NVIDIA H100 NVL/PCIe/SSE2, llvmpipe (LLVM 20.1.2 256 bits)
+Audio:
+  Message: No device data found.
+Network:
+  Message: No PCI device data found.
+  IF-ID-1: eth0 state: up speed: 100000 Mbps duplex: full mac: <filter>
+Drives:
+  Local Storage: total: 3.74 TiB used: 111.41 GiB (2.9%)
+  ID-1: /dev/nvme0n1 vendor: Microsoft model: NVMe Direct Disk v2 size: 3.49 TiB speed: 16 Gb/s
+    lanes: 4 tech: SSD serial: <filter> fw-rev: NVMDV002 temp: 71.8 C
+  ID-2: /dev/sda model: Virtual Disk size: 128 GiB tech: N/A serial: N/A fw-rev: 1.0 scheme: GPT
+  ID-3: /dev/sdb model: Virtual Disk size: 128 GiB tech: N/A serial: N/A fw-rev: 1.0 scheme: MBR
+Partition:
+  ID-1: / size: 122.95 GiB used: 111.13 GiB (90.4%) fs: ext4 dev: /dev/sda1
+  ID-2: /boot size: 880.4 MiB used: 273.9 MiB (31.1%) fs: ext4 dev: /dev/sda16
+  ID-3: /boot/efi size: 104.3 MiB used: 6.1 MiB (5.9%) fs: vfat dev: /dev/sda15
+Swap:
+  Alert: No swap data was found.
+Sensors:
+  System Temperatures: cpu: N/A mobo: N/A gpu: nvidia temp: 53 C
+  Fan Speeds (rpm): N/A
+Info:
+  Memory: total: 320 GiB available: 314.69 GiB used: 5.78 GiB (1.8%)
+  Processes: 474 Power: uptime: 17d 22h 59m states: freeze,mem,disk suspend: s2idle wakeups: 0
+    hibernate: shutdown Init: systemd v: 255 target: graphical (5) default: graphical
+  Packages: pm: dpkg pkgs: 1105 Compilers: clang: 17 gcc: 13.3.0 alt: 12 Shell: Bash v: 5.2.21
+    running-in: pty pts/0 (SSH) inxi: 3.3.34
+```
 
 Determinism: `COMPRESSION_DETERMINISTIC=strict` (see `DECODE.env`).
 
@@ -111,3 +269,13 @@ scripts/package_s.sh      decoder zip + Total S = |bitstream| + |zip -9|
 scripts/                 decode, encode, measure S, tests
 tests/                   lockstep unit tests (not packed into S)
 ```
+
+## Acknowledgements
+
+Peel and Total S stand on work we did not write. Licenses and the exact vendored subset: [NOTICE](NOTICE).
+
+- [cmix-lex](https://github.com/blahem/cmix-lex) — PHDA9 / WRT / article reorder (`vendor/cmix-lex/`), plus `dict/english.dic` and `dict/new_article_order`
+- [cmix](https://github.com/byronknoll/cmix) — WRT dictionary lineage for `english.dic`
+- [UPX](https://upx.github.io) — packs `bin/blsmc_prepare` before `zip -9`; that packed binary is what enters S
+- PyTorch, CUDA, and safetensors — AC encode / decode runtime (not vendored)
+- [Large Text Compression Benchmark](https://mattmahoney.net/dc/text.html) — Matt Mahoney

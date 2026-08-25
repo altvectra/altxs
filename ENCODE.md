@@ -97,4 +97,4 @@ It writes `work/blsmc_ac_decoder.zip` (enters S) and `work/blsmc_ac_decoder.S.tx
 
 **S = |payload_final_fullsha.bin| + |blsmc_ac_decoder.zip|**
 
-Tagged `ltcb-3.15bpw`: 93,154,708 + 13,437,796 = **106,592,504**.
+Tagged `ltcb-3.15bpw`: 93,434,410 + 13,490,401 = **106,924,811**.

@@ -80,7 +80,7 @@ Or via the wrappers: `./scripts/encode.sh --bitstream-only --bytes 4194304` then
 
 **Timing (H100, `DECODE.env`).** Encode of 4 MiB is the cheap half (W=64 mega). Decode pays one fused window step per accepted token, so 4 MiB is **hours**. A W=1 encode of the same prefix was ~9 h at ~124 sym/s; production decode is in that ballpark. `--bytes 1048576` is the shorter variant. This is still not a several-day job.
 
-A 4 MiB-only bitstream is **not** a prefix of the ranking 93,154,708-byte stream (the AC coder flushes at the end of the chosen `N`). It only proves the same model + env + incremental path.
+A 4 MiB-only bitstream is **not** a prefix of the ranking 93,434,410-byte stream (the AC coder flushes at the end of the chosen `N`). It only proves the same model + env + incremental path.
 
 To decode the first `N` symbols from the **published** full bitstream instead:
 

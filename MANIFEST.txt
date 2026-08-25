@@ -16,8 +16,8 @@
 #   DECODE.env  DECODE.md  MANIFEST.txt
 #
 # Tagged sizes (InfoZIP zip -9):
-#   bitstream  93,154,708
-#   decoder zip  13,437,796
-#   S  106,592,504
+#   bitstream  93,434,410
+#   decoder zip  13,490,401
+#   S  106,924,811
 #
 # sha256 lines are appended when the zip is built.
