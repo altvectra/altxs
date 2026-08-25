@@ -24,8 +24,7 @@ Decoder zip (`zip -9`, 35 members, 89.4% of raw) from [`final_total_S.md`](final
 
 **S** = 93,434,410 + 13,490,401 = **106,924,811**. The AC bitstream is counted separately and is not in the zip.
 
-(Files available for review here)
-
+[Files available for review here](https://github.com/altvectra/altxs/releases/tag/ltcb-3.15bpw)
 
 ## Submission for Large Text Compression Benchmark
 
@@ -210,6 +209,32 @@ That codec is the product. How it was fit is not part of this repo.
 - CPU-only decode
 - Reproducing the student from anything except the shipped mixed-bit ΔW + `Init(seed)`
 - Hutter Prize `archive9` limits (≤10 GiB RAM, CPU, Geekbench time). This is an LTCB GPU entry, same class as nncp / jax-compress.
+
+## One-command encode
+
+From a clean checkout. Official `enwik9` is not in git. Needs the shipped ΔW in `weights/`, CUDA PyTorch, and an H100-class GPU. Same `DECODE.env` as decode.
+
+```bash
+WITH_PYTHON=1 WITH_ENWIK9=1 ./scripts/setup.sh   # vendors, blsmc_prepare, venv, enwik9
+./scripts/encode.sh                              # peel → Init(seed)+ΔW → full AC
+```
+
+Writes `work/ac_encode/payload_final_fullsha.bin` (full stream, ~60 h). Zip the decompresser and close S:
+
+```bash
+./scripts/package_s.sh \
+  --bitstream work/ac_encode/payload_final_fullsha.bin \
+  --product data/enwik9.blsmc_full.m3v2.payload_sim
+```
+
+If `data/enwik9` and the peel product are already present:
+
+```bash
+./scripts/encode.sh                  # peel again, then AC
+./scripts/encode.sh --bitstream-only # skip peel; AC only
+```
+
+`--bytes 4194304` encodes a 4 MiB prefix (not a prefix of the ranking bitstream). Details: [ENCODE.md](ENCODE.md).
 
 ## One-command decode
 
